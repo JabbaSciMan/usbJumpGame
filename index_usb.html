@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Power Jump - USB Edition</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --surface: #16161a;
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --text: #ffffff;
+            --text-dim: #a1a1aa;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .connect-bar {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            border: 1px solid var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            background: var(--bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem;
+            border-radius: 0.8rem;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .main-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .card-unit {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0.2rem;
+        }
+
+        .record-card {
+            background: linear-gradient(135deg, rgba(112, 0, 255, 0.1), rgba(0, 242, 255, 0.1));
+            border: 1px solid var(--secondary);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .record-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: var(--surface);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .history-item {
+            background: var(--surface);
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .h-height {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .h-time {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn-small {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.5rem;
+            font-size: 0.6rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>ELITE POWER JUMP</h1>
+            <p style="color:var(--text-dim); font-size:0.8rem; margin-top:0.5rem">USB STATION EDITION</p>
+        </header>
+
+        <div class="connect-bar" id="connect-area">
+            <button class="btn" id="connect-btn">Connect to Station</button>
+        </div>
+
+        <div class="input-group">
+            <label>Player Name</label>
+            <input type="text" id="player-name" placeholder="Enter Name" maxlength="15">
+            <button class="btn" id="start-btn" disabled>Start Session</button>
+        </div>
+
+        <div style="text-align:center">
+            <div id="status" class="status-badge">Disconnected</div>
+        </div>
+
+        <div class="main-stats">
+            <div class="stat-card">
+                <div class="card-label">Height</div>
+                <div class="card-value" id="current-height">0.0</div>
+                <div class="card-unit">INCHES</div>
+            </div>
+            <div class="stat-card">
+                <div class="card-label">Air Time</div>
+                <div class="card-value" id="current-hangtime">.000</div>
+                <div class="card-unit">SECONDS</div>
+            </div>
+        </div>
+
+        <div class="record-card">
+            <div class="record-badge">SESSION BEST</div>
+            <div class="card-label">Best Jump Today</div>
+            <div class="card-value" id="record-height">0.0</div>
+            <div class="card-unit" id="record-holder">NO DATA</div>
+        </div>
+
+        <div class="history">
+            <div class="history-header">
+                <h2 style="font-size:1rem; color:var(--text-dim)">History</h2>
+                <button class="btn-small" id="clear-btn">Clear All</button>
+            </div>
+            <div id="history-list" class="history-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let port;
+        let reader;
+        let writer;
+        let inputDone;
+        let outputDone;
+        let inputStream;
+        let outputStream;
+
+        const connectBtn = document.getElementById('connect-btn');
+        const startBtn = document.getElementById('start-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const nameInput = document.getElementById('player-name');
+        const statusEl = document.getElementById('status');
+        const heightEl = document.getElementById('current-height');
+        const hangtimeEl = document.getElementById('current-hangtime');
+        const recordHeightEl = document.getElementById('record-height');
+        const recordHolderEl = document.getElementById('record-holder');
+        const historyList = document.getElementById('history-list');
+
+        nameInput.value = localStorage.getItem('lastJumper') || "";
+
+        connectBtn.onclick = async () => {
+            try {
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 115200 });
+
+                connectBtn.textContent = "✓ Connected";
+                connectBtn.disabled = true;
+                statusEl.textContent = "Ready";
+
+                const encoder = new TextEncoderStream();
+                outputDone = encoder.readable.pipeTo(port.writable);
+                outputStream = encoder.writable;
+                writer = outputStream.getWriter();
+
+                readLoop();
+            } catch (err) {
+                alert("Serial Connection Failed: " + err.message);
+            }
+        };
+
+        async function readLoop() {
+            const decoder = new TextDecoderStream();
+            inputDone = port.readable.pipeTo(decoder.writable);
+            inputStream = decoder.readable;
+            reader = inputStream.getReader();
+
+            let partialData = "";
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    partialData += value;
+                    const lines = partialData.split("\n");
+                    partialData = lines.pop(); // Keep partial last line
+
+                    for (const line of lines) {
+                        if (line.startsWith("DATA:")) {
+                            try {
+                                const data = JSON.parse(line.substring(5));
+                                updateUI(data);
+                            } catch (e) { }
+                        }
+                    }
+                }
+            } finally {
+                reader.releaseLock();
+            }
+        }
+
+        function updateUI(data) {
+            // Status Badge
+            if (data.jumping) {
+                statusEl.textContent = 'In Air';
+                statusEl.style.color = 'var(--primary)';
+            } else if (data.armed) {
+                statusEl.textContent = `Armed: ${data.name}`;
+                statusEl.style.color = 'var(--warning)';
+            } else {
+                statusEl.textContent = 'Station Ready';
+                statusEl.style.color = 'var(--success)';
+            }
+
+            // Start Button Logic
+            if (data.armed) {
+                startBtn.disabled = true;
+                startBtn.textContent = "Session Active";
+            } else if (!data.button_pressed) {
+                startBtn.disabled = true;
+                startBtn.textContent = "Stand on Board";
+            } else {
+                startBtn.disabled = false;
+                startBtn.textContent = "Start Session";
+            }
+
+            // Metrics
+            heightEl.textContent = data.height.toFixed(1);
+            hangtimeEl.textContent = data.hangtime.toFixed(3);
+
+            // Records
+            if (data.history.length > 0) {
+                const best = data.history.reduce((prev, current) => (prev.height > current.height) ? prev : current);
+                recordHeightEl.textContent = best.height.toFixed(1);
+                recordHolderEl.textContent = `${best.name || 'Unknown'} - ${best.hangtime.toFixed(3)}s`;
+            }
+
+            // History List
+            historyList.innerHTML = '';
+            [...data.history].reverse().forEach(jump => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <div class="h-name"><b>${jump.name || 'User'}</b></div>
+                    <div class="h-metrics">
+                        <span class="h-height">${jump.height.toFixed(1)}"</span>
+                        <span style="color:var(--text-dim); margin-left:10px">${jump.hangtime.toFixed(3)}s</span>
+                    </div>
+                `;
+                historyList.appendChild(item);
+            });
+        }
+
+        startBtn.onclick = async () => {
+            const name = nameInput.value.trim() || "Guest";
+            localStorage.setItem('lastJumper', name);
+            await writer.write(`START:${name}\n`);
+        };
+
+        clearBtn.onclick = async () => {
+            if (confirm("Clear session history?")) {
+                await writer.write("CLEAR\n");
+            }
+        };
+    </script>
+</body>
+
+</html>
